@@ -1,0 +1,58 @@
+{
+  "build": {
+    "builder": "docker"
+  },
+  "deploy": {
+    "resources": [
+      {
+        "service": "flowforge",
+        "ports": [
+          {
+            "port": 3000,
+            "protocol": "http"
+          }
+        ]
+      },
+      {
+        "service": "ollama",
+        "image": "ollama/ollama",
+        "env": {
+          "OLLAMA_HOST": "0.0.0.0"
+        },
+        "ports": [
+          {
+            "port": 11434,
+            "protocol": "http"
+          }
+        ]
+      },
+      {
+        "service": "chroma",
+        "image": "chromadb/chroma",
+        "ports": [
+          {
+            "port": 8000,
+            "protocol": "http"
+          }
+        ],
+        "env": {
+          "CHROMA_DB_IMPL": "clickhouse",
+          "CLICKHOUSE_HOST": "clickhouse",
+          "CLICKHOUSE_PORT": "8123"
+        }
+      },
+      {
+        "service": "clickhouse",
+        "image": "clickhouse/clickhouse-server:latest"
+      },
+      {
+        "service": "postgres",
+        "image": "postgres:15",
+        "env": {
+          "POSTGRES_DB": "flowforge",
+          "POSTGRES_PASSWORD": "railway"
+        }
+      }
+    ]
+  }
+}
